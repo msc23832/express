@@ -1,19 +1,17 @@
 import { Router, Request, Response } from 'express';
-import { MongoClient, ObjectID } from 'mongodb';
-import * as myConfig from 'Config';
-import { mongodb } from '../helpers/mongodb';
+import { mongodb } from '../helpers/mongoDB';
+import * as myConfig from 'config';
 
 let config: any = myConfig.get('Config');
 var jwt = require("jwt-simple");
 
 const router: Router = Router();
 
-router.post('/doLogin', function (req, res) {
+router.post("/doLogin", function (req, res) {
     if (req.body.email && req.body.password) {
-        let data = req.body;
-        mongodb.collection("user").findOne({
-            email: data.email,
-            password: data.password
+        mongodb.collection("user").findOne({ 
+            email: req.body.email,
+            password : req.body.password
         }).then((results) => {
             var userInfo = results;
             if (userInfo) {
