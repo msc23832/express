@@ -2,15 +2,18 @@ import { Router, Request, Response } from 'express';
 import { MongoClient, ObjectID } from 'mongodb';
 import * as myConfig from 'Config';
 import { mongodb } from '../helpers/mongodb';
+import * as auth from '../helpers/auth';
 
 let config:any = myConfig.get('Config');
 
 
 const router: Router = Router();
 
+//router.use(auth.authenticate());
+
 //var mongodb;
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', auth.authenticate(), (req: Request, res: Response) => {
     mongodb.collection('company').find().toArray().then((result) => {
         res.json(result);
     });
@@ -62,7 +65,7 @@ MongoClient.connect(config.mongodbUrl, (err, db) => {
         if (err) {
             console.log(err);
         }else{
-            mongodb = db;
+            this.mongodb = db;
         }
 
     //db.collection('company').find().toArray((err, result) => {

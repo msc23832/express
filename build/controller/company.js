@@ -1,13 +1,17 @@
 "use strict";
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var mongodb_1 = require("mongodb");
 var myConfig = require("Config");
+var mongodb_2 = require("../helpers/mongodb");
+var auth = require("../helpers/auth");
 var config = myConfig.get('Config');
 var router = express_1.Router();
-var mongodb;
-router.get('/', function (req, res) {
-    mongodb.collection('company').find().toArray().then(function (result) {
+//router.use(auth.authenticate());
+//var mongodb;
+router.get('/', auth.authenticate(), function (req, res) {
+    mongodb_2.mongodb.collection('company').find().toArray().then(function (result) {
         res.json(result);
     });
     //res.json(mongodb);
@@ -21,14 +25,14 @@ router.post('/', function (req, res) {
             code: "005",
             name: "Test CompName #5"
         }];
-    mongodb.collection('company').insertMany(company).then(function (data) {
+    mongodb_2.mongodb.collection('company').insertMany(company).then(function (data) {
         res.json(data);
     });
 });
 router.delete('/:id', function (req, res) {
     //var id = new ObjectID(req.params.id);
     var Code = req.params.id;
-    mongodb.collection('company').deleteOne({ code: Code }).then(function (data) {
+    mongodb_2.mongodb.collection('company').deleteOne({ code: Code }).then(function (data) {
         res.json({ 'Delete Success': data });
     });
 });
@@ -39,7 +43,7 @@ router.put('/:id', function (req, res) {
         code: "004",
         name: "Test CompName #4"
     };
-    mongodb.collection('company').updateOne({ code: Code }, company).then(function (data) {
+    mongodb_2.mongodb.collection('company').updateOne({ code: Code }, company).then(function (data) {
         res.json({ 'Update Success': data });
     });
 });
@@ -49,7 +53,7 @@ mongodb_1.MongoClient.connect(config.mongodbUrl, function (err, db) {
         console.log(err);
     }
     else {
-        mongodb = db;
+        _this.mongodb = db;
     }
     //db.collection('company').find().toArray((err, result) => {
     //    if (err) {
