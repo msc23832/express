@@ -8,10 +8,10 @@ var jwt = require("jwt-simple");
 
 const router: Router = Router();
 
-router.get('/', (req: Request, res: Response) => {
+router.post('/doLogin', function (req, res) {
     if (req.body.email && req.body.password) {
         let data = req.body;
-        mongodb.collection("user").find({
+        mongodb.collection("user").findOne({
             email: data.email,
             password: data.password
         }).then((results) => {
@@ -19,8 +19,13 @@ router.get('/', (req: Request, res: Response) => {
             if (userInfo) {
                 var token = jwt.encode(userInfo, config.auth.jwtSecret);
                 res.json({
-                    success: false,
-                    message: 'Login fail.'
+                    success : true,
+                    token: token
+                });
+            }else{
+                res.json({
+                    success : false,
+                    message : 'Login fail.'
                 });
             }
         }).catch((err) => {
