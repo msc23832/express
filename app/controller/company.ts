@@ -1,9 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { MongoClient, ObjectID } from 'mongodb';
+import * as myConfig from 'Config';
+import { mongodb } from '../helpers/mongodb';
+
+let config:any = myConfig.get('Config');
+
 
 const router: Router = Router();
 
-var mongodb;
+//var mongodb;
 
 router.get('/', (req: Request, res: Response) => {
     mongodb.collection('company').find().toArray().then((result) => {
@@ -52,7 +57,7 @@ router.put('/:id', (req: Request, res: Response) => {
     });
 });
 
-MongoClient.connect("mongodb://localhost:27017/issuedb", (err, db) => {
+MongoClient.connect(config.mongodbUrl, (err, db) => {
     //console.log(err);
         if (err) {
             console.log(err);
