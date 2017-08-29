@@ -2,10 +2,25 @@ import { Router, Request, Response } from 'express';
 import { MongoClient, ObjectID } from 'mongodb';
 import * as myConfig from 'Config';
 import { mongodb } from '../helpers/mongodb';
+import * as multer from 'multer';
+var fs = require('fs');
 
 let config: any = myConfig.get('Config');
 
 const router: Router = Router();
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, config.uploadPath);
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.params.id);
+    }
+})
+
+var upload = multer({
+    storage: storage
+});
 
 router.post('/', (req: Request, res: Response) => {
     let data = req.body;
@@ -28,6 +43,22 @@ router.delete('/:id', (req:Request, res:Response) => {
     console.log(id);
     mongodb.collection('user').deleteOne({_id: id}).then((data) => {
         res.json({ 'Delete Success': data });
+    });
+});
+
+router.post('/profile/:id', upload.single('file'), (req:Request, res:Response) => {
+    
+    res.json("success");
+});
+
+router.get('/profile/:id', (req: Request, res: Response) => {
+    fs.readFile(`${config.uploadPath}${req.params.id}`, (err, data) => {
+        if (!err) {
+            res.write(data);
+            res.end();
+        } else {
+            res.end();
+        }
     });
 });
 
