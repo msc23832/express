@@ -5,6 +5,7 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 var auth = require("./helpers/auth");
 var company_1 = require("./controller/company");
+var customer_1 = require("./controller/customer");
 var login_1 = require("./controller/login");
 var user_1 = require("./controller/user");
 var app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(auth.initialize());
 app.use('/company', company_1.CompanyController);
+app.use('/customer', customer_1.CustomerController);
 app.use('/login', login_1.LoginController);
 app.use('/user', user_1.UserController);
 app.listen(port, function () {

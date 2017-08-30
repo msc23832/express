@@ -5,6 +5,7 @@ import * as auth from './helpers/auth';
 
 
 import { CompanyController } from './controller/company'
+import { CustomerController } from './controller/customer'
 import { LoginController } from './controller/login'
 import { UserController } from './controller/user'
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(auth.initialize());
 app.use('/company', CompanyController);
+app.use('/customer', CustomerController);
 app.use('/login', LoginController);
 app.use('/user', UserController);
 
