@@ -8,6 +8,7 @@ import { CompanyController } from './controller/company'
 import { CustomerController } from './controller/customer'
 import { LoginController } from './controller/login'
 import { UserController } from './controller/user'
+import { IssueController } from './controller/issue'
 
 const app: express.Application = express();
 
@@ -23,6 +24,7 @@ app.use('/company', CompanyController);
 app.use('/customer', CustomerController);
 app.use('/login', LoginController);
 app.use('/user', UserController);
+app.use('/issue', IssueController);
 
 app.listen(port, () => {
     console.log(`listen PORT : ${port}` );

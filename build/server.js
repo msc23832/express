@@ -8,6 +8,7 @@ var company_1 = require("./controller/company");
 var customer_1 = require("./controller/customer");
 var login_1 = require("./controller/login");
 var user_1 = require("./controller/user");
+var issue_1 = require("./controller/issue");
 var app = express();
 var port = process.env.PORT || '3200';
 app.use(cors());
@@ -20,6 +21,7 @@ app.use('/company', company_1.CompanyController);
 app.use('/customer', customer_1.CustomerController);
 app.use('/login', login_1.LoginController);
 app.use('/user', user_1.UserController);
+app.use('/issue', issue_1.IssueController);
 app.listen(port, function () {
     console.log("listen PORT : " + port);
 });

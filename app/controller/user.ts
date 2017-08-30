@@ -24,13 +24,13 @@ var upload = multer({
 
 router.post('/', (req: Request, res: Response) => {
     let data = req.body;
-     mongodb.collection("user").insertOne(data).then((data) => {
+    mongodb.collection("user").insert(data).then((result) => {
+       console.dir(data);
         res.json(data);
-     });
+    });
 });
 
 router.get('/', (req: Request, res: Response) => {
-    let data = req.body;
      mongodb.collection("user").find().toArray().then((data) => {
         res.json(data);
      });
@@ -46,9 +46,10 @@ router.delete('/:id', (req:Request, res:Response) => {
     });
 });
 
-router.post('/profile/:id', upload.single('file'), (req:Request, res:Response) => {
-    
-    res.json("success");
+router.post('/profile/:id', upload.single('avatar'), (req:Request, res:Response) => {
+    res.json({
+        success: true
+    });
 });
 
 router.get('/profile/:id', (req: Request, res: Response) => {
@@ -60,6 +61,23 @@ router.get('/profile/:id', (req: Request, res: Response) => {
             res.end();
         }
     });
+});
+
+router.put('/:id', (req: Request, res: Response) => {
+    let id = new ObjectID(req.params.id);
+    let data = req.body;
+    mongodb.collection("user").updateOne({ _id: id }, data).then((data) => {
+        res.json(data);
+    });
+});
+
+router.get('/findById/:id', (req: Request, res: Response) => {
+    let id = new ObjectID(req.params.id);
+    mongodb.collection("user").find({ _id: id }).toArray()
+        .then((data) => {
+            res.json(data);
+        }
+        );
 });
 
 export const UserController: Router = router;
