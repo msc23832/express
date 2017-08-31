@@ -2,12 +2,14 @@ import { Router, Request, Response } from 'express';
 import { MongoClient, ObjectID } from 'mongodb';
 import * as myConfig from 'Config';
 import { mongodb } from '../helpers/mongodb';
+import * as auth from '../helpers/auth';
 import * as multer from 'multer';
 var fs = require('fs');
 
 let config: any = myConfig.get('Config');
 
 const router: Router = Router();
+//router.use(auth.authenticate());
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
